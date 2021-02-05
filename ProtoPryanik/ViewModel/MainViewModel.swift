@@ -29,7 +29,15 @@ class MainViewModel: PryanikRequestObserver{
     
     //TODO: remove force unwrapping
     func update(data: Pryanik) {
-        self.data.onNext(data.data)
+        var temp = [Datum]()
+        for item in data.view{
+            for data in data.data{
+                if PryanikDataType(rawValue: "\(item)") == data.type {
+                    temp.append(data)
+                }
+            }
+        }
+        self.data.onNext(temp)
         for item in data.data{
             if item.type == PryanikDataType.selector{
                 selection.onNext(item.data.variants!)
